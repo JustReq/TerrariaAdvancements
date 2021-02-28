@@ -1,0 +1,3 @@
+displayName = Terraria Advancements
+author = Just Req
+version = 0.1
