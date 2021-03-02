@@ -22,8 +22,8 @@ namespace TerrariaAdvancements.UI
         FixedUIScrollbar TerrariaCategoryScrollbar = new FixedUIScrollbar(ModContent.GetInstance<TerrariaAdvancements>().ATInterface);
 
         UIImage TimberAchievement = new UIImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/Locked/Terraria/Timber_Locked"));
-        UIPanel Timber_HammerTime = new UIPanel();
-        UIPanel Timber_NoHobo = new UIPanel();
+        UIImage HammerTimeAchievement = new UIImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/Locked/Terraria/HammerTime_Locked"));
+        UIImage Timber_HammerTime = new UIImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/AchievementBarEmpty"));
 
         public override void OnInitialize()
         {
@@ -73,11 +73,14 @@ namespace TerrariaAdvancements.UI
             TimberAchievement.Height.Set(64, 0);
             TimberAchievement.HAlign = 0.1f;
 
+            HammerTimeAchievement.Width.Set(64, 0);
+            HammerTimeAchievement.Height.Set(64, 0);
+            HammerTimeAchievement.HAlign = 0.42f;
+
             Timber_HammerTime.Width.Set(100, 0);
             Timber_HammerTime.Height.Set(10, 0);
             Timber_HammerTime.Left.Pixels = 63;
             Timber_HammerTime.VAlign = 0.5f;
-            Timber_HammerTime.BackgroundColor = Color.Black;
 
             Append(ATPanel);
 
@@ -94,6 +97,8 @@ namespace TerrariaAdvancements.UI
             TerrariaCategoryPanel.Append(TerrariaCategoryScrollbar);
 
             TerrariaCategoryPanel.Append(TimberAchievement);
+            TerrariaCategoryPanel.Append(HammerTimeAchievement);
+
             TimberAchievement.Append(Timber_HammerTime);
         }
 
@@ -104,14 +109,33 @@ namespace TerrariaAdvancements.UI
             HoverText.Left.Pixels = Main.MouseScreen.X + 20f;
             HoverText.Top.Pixels = Main.MouseScreen.Y + 20f;
 
-            if (player.GetModPlayer<TerrariaAdvancementsPlayer>().Timber != true)
+            if (ModContent.GetInstance<TerrariaAdvancementsWorld>().Timber != true)
             {
-                HoverText.SetText("???");
                 TimberAchievement.SetImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/Locked/Terraria/Timber_Locked"));
             }
             else
             {
                 TimberAchievement.SetImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/Unlocked/Terraria/Timber_Unlocked"));
+            }
+            if (ModContent.GetInstance<TerrariaAdvancementsWorld>().HammerTime != true)
+            {
+                HammerTimeAchievement.SetImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/Locked/Terraria/HammerTime_Locked"));
+            }
+            else
+            {
+                HammerTimeAchievement.SetImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/Unlocked/Terraria/HammerTime_Unlocked"));
+            }
+            if  (ModContent.GetInstance<TerrariaAdvancementsWorld>().Timber != true && ModContent.GetInstance<TerrariaAdvancementsWorld>().HammerTime != true)
+            {
+                Timber_HammerTime.SetImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/AchievementBarEmpty"));
+            }
+            else if (ModContent.GetInstance<TerrariaAdvancementsWorld>().Timber == true && ModContent.GetInstance<TerrariaAdvancementsWorld>().HammerTime != true)
+            {
+                Timber_HammerTime.SetImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/AchievementBarHalfFull"));
+            }
+            else if (ModContent.GetInstance<TerrariaAdvancementsWorld>().Timber == true && ModContent.GetInstance<TerrariaAdvancementsWorld>().HammerTime == true)
+            {
+                Timber_HammerTime.SetImage(ModContent.GetTexture("TerrariaAdvancements/UI/Images/Achievements/AchievementBarFull"));
             }
 
             if (TerrariaCategoryButton.IsMouseHovering)
@@ -136,13 +160,24 @@ namespace TerrariaAdvancements.UI
             }
             else if (TimberAchievement.IsMouseHovering)
             {
-                if (player.GetModPlayer<TerrariaAdvancementsPlayer>().Timber != true)
+                if (ModContent.GetInstance<TerrariaAdvancementsWorld>().Timber != true)
                 {
                     HoverText.SetText("???");
                 }
                 else
                 {
                     HoverText.SetText("[c/FFD700:Timber!!]\nChop down your first tree.");
+                }
+            }
+            else if (HammerTimeAchievement.IsMouseHovering)
+            {
+                if (ModContent.GetInstance<TerrariaAdvancementsWorld>().HammerTime != true)
+                {
+                    HoverText.SetText("???");
+                }
+                else
+                {
+                    HoverText.SetText("[c/FFD700:Stop! Hammer Time!]\nObtain your first hammer via crafting or otherwise.");
                 }
             }
             else
